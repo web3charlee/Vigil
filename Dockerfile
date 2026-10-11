@@ -12,5 +12,4 @@ ENV NODE_ENV=production
 COPY package*.json ./
 RUN npm ci --omit=dev
 COPY --from=build /app/dist ./dist
-VOLUME /app/data
 CMD ["npm", "run", "start:prod"]

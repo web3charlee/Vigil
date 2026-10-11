@@ -1,0 +1,106 @@
+import type { MarketData, SafetyData } from '../src/types.js';
+
+export const NOW = Date.UTC(2026, 9, 10, 12, 0, 0);
+
+export const market = (over: Partial<MarketData> = {}): MarketData => ({
+  chainKey: 'base',
+  address: '0x1111111111111111111111111111111111111111',
+  name: 'Test Token',
+  symbol: 'TEST',
+  dex: 'uniswap',
+  pairAddress: '0x2222222222222222222222222222222222222222',
+  priceUsd: 0.0123,
+  liquidityUsd: 450_000,
+  fdvUsd: 5_000_000,
+  marketCapUsd: 5_000_000,
+  volume24hUsd: 300_000,
+  priceChange24hPct: 4.2,
+  pairCreatedAt: NOW - 30 * 24 * 3_600_000,
+  dexscreenerUrl: 'https://dexscreener.com/base/0x2222',
+  isConcentratedPool: false,
+  ...over,
+});
+
+export const cleanSafety = (over: Partial<SafetyData> = {}): SafetyData => ({
+  isHoneypot: false,
+  cannotSellAll: false,
+  buyTax: 0,
+  sellTax: 0,
+  isOpenSource: true,
+  isProxy: false,
+  isMintable: false,
+  hiddenOwner: false,
+  canTakeBackOwnership: false,
+  ownerChangeBalance: false,
+  transferPausable: false,
+  tradingCooldown: false,
+  hasBlacklist: false,
+  hasWhitelist: false,
+  slippageModifiable: false,
+  selfDestruct: false,
+  externalCall: false,
+  isFakeToken: false,
+  creatorHoneypotHistory: false,
+  holderCount: 5_000,
+  creatorPercent: 0.5,
+  ownerPercent: 0,
+  ownershipRenounced: false,
+  topHolders: [
+    { address: '0x2222222222222222222222222222222222222222', percent: 30, isContract: true, isLocked: false }, // the pool
+    { address: '0xaaaa000000000000000000000000000000000001', percent: 3, isContract: false, isLocked: false },
+    { address: '0xaaaa000000000000000000000000000000000002', percent: 2, isContract: false, isLocked: false },
+  ],
+  lpLockedPercent: 100,
+  ...over,
+});
+
+// Shapes match the public DexScreener / GoPlus response formats.
+export const dexPair = (chainId: string, liquidityUsd: number, over: Record<string, unknown> = {}) => ({
+  chainId,
+  dexId: 'uniswap',
+  url: `https://dexscreener.com/${chainId}/0xpair`,
+  pairAddress: `0xpair${chainId}`,
+  baseToken: { address: '0x1111111111111111111111111111111111111111', name: 'Test Token', symbol: 'TEST' },
+  quoteToken: { address: '0xweth', name: 'Wrapped Ether', symbol: 'WETH' },
+  priceUsd: '0.0123',
+  liquidity: { usd: liquidityUsd },
+  fdv: 5_000_000,
+  marketCap: 5_000_000,
+  volume: { h24: 100_000 },
+  priceChange: { h24: 2.5 },
+  pairCreatedAt: NOW - 10 * 24 * 3_600_000,
+  ...over,
+});
+
+export const goplusRaw = (over: Record<string, unknown> = {}) => ({
+  is_honeypot: '0',
+  buy_tax: '0.01',
+  sell_tax: '0.02',
+  is_open_source: '1',
+  is_proxy: '0',
+  is_mintable: '0',
+  hidden_owner: '0',
+  can_take_back_ownership: '0',
+  owner_change_balance: '0',
+  transfer_pausable: '0',
+  trading_cooldown: '0',
+  is_blacklisted: '0',
+  is_whitelisted: '0',
+  slippage_modifiable: '0',
+  selfdestruct: '0',
+  external_call: '0',
+  honeypot_with_same_creator: '0',
+  owner_address: '0xcccc000000000000000000000000000000000001',
+  holder_count: '1200',
+  creator_percent: '0.01',
+  owner_percent: '0',
+  holders: [
+    { address: '0xpairbase', percent: '0.4', is_contract: 1, is_locked: 0 },
+    { address: '0xaaaa000000000000000000000000000000000001', percent: '0.04', is_contract: 0, is_locked: 0 },
+  ],
+  lp_holders: [
+    { address: '0x000000000000000000000000000000000000dead', percent: '0.95', is_locked: 1 },
+    { address: '0xbbbb000000000000000000000000000000000001', percent: '0.05', is_locked: 0 },
+  ],
+  ...over,
+});
